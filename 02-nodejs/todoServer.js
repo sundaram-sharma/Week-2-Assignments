@@ -46,4 +46,53 @@ const app = express();
 
 app.use(bodyParser.json());
 
+const port = 3000
+
+var todos = [];
+
+function findIndex(arr, id){
+  for(let i = 0; i<todos.length; i++){
+    if( arr[i].id === id){ return i }
+    return -1 //if id is not present
+  }
+}
+
+function removeAtIndex(arr, id){
+  let newArray = [];
+  for(let i = 0; i < arr.length; i++){
+    if( i !== id ){ newArray.push(arr[i])} //adding values in new array
+  }
+
+  return newArray; //returning the new array by removeing the old item
+}
+
+app.get('/todos', (req, res) => {
+  res.json(todos).sendStatus(200);
+})
+
+app.get('/todos/:id', (req, res) =>{
+  let todoIndex = findIndex(todos, parseInt(req.params.id));
+  if( todoIndex === -1 ){
+    res.sendStatus(401); // send 401 if the index is not present in the array
+  }
+  else{
+    res.sendStatus(200).json(todos[todoIndex]); // send the todo acc to the index.
+  }
+});
+
+app.post('/todos', (req,res) => {
+
+})
+
+app.put('/todos/:id', (req,res) => {
+  
+})
+
+app.delete('/todos/:id', (req,res) => {
+  
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})  
 module.exports = app;
