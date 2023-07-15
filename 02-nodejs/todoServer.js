@@ -76,20 +76,44 @@ app.get('/todos/:id', (req, res) =>{
     res.sendStatus(401); // send 401 if the index is not present in the array
   }
   else{
-    res.sendStatus(200).json(todos[todoIndex]); // send the todo acc to the index.
+    res.json(todos[todoIndex]); // send the todo acc to the index.
   }
 });
 
-app.post('/todos', (req,res) => {
-
-})
+app.post('/todos', (req, res) => {
+  const newTodo = {
+    id: Math.floor(Math.random() * 1000000), // unique random id
+    title: req.body.title,
+    description: req.body.description,
+    completed: req.body.completed
+  };
+  todos.push(newTodo);
+  res.status(201).json(newTodo);
+});
 
 app.put('/todos/:id', (req,res) => {
-  
+  let todoIndex = findIndex(todos, parseInt(req.params.id));
+  const data1 = req.body;
+  if(todoIndex === -1){
+    res.sendStatus(401)
+  }
+  else{
+    todos[todoIndex].title = data1.title;
+    todos[todoIndex].description = data1.description;
+    res.json(todos[todoIndex]);
+  }
 })
 
 app.delete('/todos/:id', (req,res) => {
-  
+  const todoIndex = findIndex(todos, parseInt(req.params.id));
+  if(todoIndex === -1){
+    res.sendStatus(401);
+  }
+  else{
+    todos = removeAtIndex(todos, todoIndex);
+    res.send("deleted").status(200);
+
+  }
 })
 
 app.listen(port, () => {
