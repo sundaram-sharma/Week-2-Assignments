@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TODO app</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <script>
+    function getData() {
+      fetch("http://localhost:3000/todos", {
+        method: "GET",
+      }).then(callback2);
+    }
+
+    getData();
+
+    function deleteDone() {
+    refreshData();
+      getData();
+      console.log("Delete done");
+      
+    }
+
+    function deleteTodo(id) {
+      console.log(id);
+      fetch("http://localhost:3000/todos/" + id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(deleteDone);
+    }
+
+    function editDone() {
+    refreshData();
+      getData();
+      //console.log("Edit done");
+    }
+
+    function editTodo(id) {
+      const title = prompt("Enter your Title:");
+      const description = prompt("Enter your Description:");
+
+      const data = {
+        title: title,
+        description: description, // Convert age to a number (optional, based on your use case)
+      };
+
+      console.log(id);
+      fetch("http://localhost:3000/todos/" + id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }).then(editDone);
+    }
+
+ 
+
+    function todoCallBack(data) {
+      //console.log("Hello");
+      var parentElement = document.getElementById("mainArea");
+      // parentElement.innerHTML = JSON.stringify(data);
+      for (var i = 0; i < data.length; i++) {
+        var childElement = document.createElement("div");
+        childElement.style.backgroundColor = '#e1e2e3';
+        childElement.style.margin = '10px';
+        childElement.style.borderRadius= '0.2cm';
+        childElement.style.color = "#333";
+        childElement.style.height = "100px";
+        childElement.style.border = "1px solid black";
+
+        var grandChildElement1 = document.createElement("span");
+        grandChildElement1.innerHTML = data[i].title;
+        grandChildElement1.style.padding = "10px";
+        grandChildElement1.style.fontFamily = "Arial, sans-serif";
+        grandChildElement1.style.fontWeight = "bold";
+        grandChildElement1.style.fontSize = "20px";
+        grandChildElement1.style.marginLeft = "10px";
+        grandChildElement1.style.marginBottom = "10px"
+
+        linebreak = document.createElement("br");
+
+        var grandChildElement2 = document.createElement("span");
+        grandChildElement2.innerHTML = data[i].description;
+        grandChildElement2.style.padding = "10px";
+        grandChildElement2.style.fontFamily = "Arial, sans-serif";
+        grandChildElement2.style.fontSize = "20px";
+        grandChildElement2.style.margin = "10px";
+        grandChildElement2.style.marginTop = "10px";
+
+        linebreak1 = document.createElement("br");
+
+        var grandChildElement5 = document.createElement("div");
+        grandChildElement5.style.marginTop = '16px'
+        grandChildElement5.style.width = '98%'
+
+        var grandChildElement3 = document.createElement("button");
+        grandChildElement3.innerHTML = "Edit";
+        grandChildElement3.style.backgroundColor = "#0764fa";
+        grandChildElement3.style.color = "#fff";
+        grandChildElement3.style.margin = "2px";
+        grandChildElement3.style.width = '49%';
+        grandChildElement3.style.height = '28px'
+        grandChildElement3.style.border = 'none';
+        grandChildElement3.style.borderRadius = '5px'
+        grandChildElement3.setAttribute(
+          "onClick",
+          "editTodo(" + data[i].id + ")"
+        ); //onclick event and deleteTodo function with appropiate ID
+
+        var grandChildElement4 = document.createElement("button");
+        grandChildElement4.innerHTML = "Delete";
+        grandChildElement4.style.backgroundColor = "#f00202";
+        grandChildElement4.style.color = "#fff";
+        grandChildElement4.style.margin = "2px";
+        grandChildElement4.style.width = '49%';
+        grandChildElement4.style.height = '28px'
+        grandChildElement4.style.borderRadius = '5px'
+        grandChildElement4.style.border = 'none';
+        grandChildElement4.setAttribute(
+          "onClick",
+          "deleteTodo(" + data[i].id + ")"
+        ); //onclick event and deleteTodo function with appropiate ID
+
+        grandChildElement5.appendChild(grandChildElement3);
+        grandChildElement5.appendChild(grandChildElement4);
+        childElement.appendChild(grandChildElement1);
+        childElement.appendChild(linebreak);
+        childElement.appendChild(grandChildElement2);
+        childElement.appendChild(linebreak1);
+        childElement.appendChild(grandChildElement5);
+        
+
+        parentElement.appendChild(childElement);
+      }
+
+      
+    }
+
+    function refreshData(){
+        var list = document.getElementById("mainArea");
+        while(list.hasChildNodes()){
+        list.removeChild(list.firstChild);
+      }
+    }
+
+    function callback2(resp) {
+      resp.json().then(todoCallBack);
+      
+    }
+
+    function parsedResponse(data) {
+      getData();
+    }
+
+    function callback(resp) {
+      resp.json().then(parsedResponse);
+    }
+
+    function onPress() {
+        refreshData();
+      var title = document.getElementById("title").value;
+      title = title + " ";
+      var description = document.getElementById("description").value;
+      fetch("http://localhost:3000/todos", {
+        method: "POST",
+        body: JSON.stringify({
+          title: title,
+          description: description,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(callback);
+    }
+  </script>
+  <body>
+    <div class="area">
+      
+      <div class="head-title">
+        <h1>Todo List</h1>
+      </div>
+      <b>Todo Title</b>
+      <br/>
+      <input type="text" id="title" />
+      <br />
+      <br />
+      <b>Todo Description</b>
+      <br />
+      <input type="text" id="description" />
+      <br />
+      <br />
+      <button class="b11" onclick="onPress()">Add Todo</button>
+      <br />
+      <br />
+      <div id="mainArea"></div>
+    </div>
+  </body>
+</html>

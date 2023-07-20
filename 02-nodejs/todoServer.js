@@ -41,8 +41,10 @@
  */
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const path = require("path");
 const app = express();
+const cors = require("cors")
+app.use(cors())
 
 app.use(bodyParser.json());
 
@@ -67,7 +69,7 @@ function removeAtIndex(arr, id){
 }
 
 app.get('/todos', (req, res) => {
-  res.json(todos).sendStatus(200);
+  res.json(todos);
 })
 
 app.get('/todos/:id', (req, res) =>{
@@ -88,7 +90,7 @@ app.post('/todos', (req, res) => {
     completed: req.body.completed
   };
   todos.push(newTodo);
-  res.status(201).json(newTodo);
+  res.json(newTodo);
 });
 
 app.put('/todos/:id', (req,res) => {

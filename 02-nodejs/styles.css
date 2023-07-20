@@ -1,0 +1,28 @@
+body{
+    background-color: rgb(255, 255, 255);
+}
+
+.area {
+    margin: auto;
+    width: 28%;
+    padding: 10px;
+}
+
+.head-title {
+    text-align: center;
+}
+
+input {
+    width: 98%; /* Set the desired width */
+    height: 38px; /* Set the desired height */
+    border-radius: 0.1cm;
+  }
+
+.b11{
+    width: 98%;
+    height: 38px;
+    background-color: rgb(3, 96, 2);
+    color: aliceblue;
+    border: none;
+    border-radius: 5px;
+}
